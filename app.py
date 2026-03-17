@@ -58,6 +58,22 @@ def set_goal_api():
     tracker.set_goal(category, hours)
     return jsonify({"message": "Goal updated"})
 
+import chatbot  # Import chatbot module here or at the top
+
+@app.route('/api/chat', methods=['POST'])
+def chat_api():
+    data = request.json
+    message = data.get('message')
+    if not message:
+        return jsonify({"error": "Missing message"}), 400
+    
+    # Get current efficiency stats to feed into chat
+    report = analysis.calculate_efficiency()
+    stats_data = report.to_dict(orient='records') if not report.empty else []
+    
+    response = chatbot.get_chatbot_response(stats_data, message)
+    return jsonify({"response": response})
+
 @app.route('/api/predict_category', methods=['GET'])
 def predict_category_api():
     activity = request.args.get('activity')

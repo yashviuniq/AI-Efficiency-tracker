@@ -7,6 +7,9 @@ def log_activity(activity_name, category, duration_minutes):
     """
     Logs an activity into the database.
     """
+    activity_name = activity_name.strip().title()
+    category = category.strip().title()
+    
     conn = get_db_connection()
     c = conn.cursor()
     
@@ -26,6 +29,8 @@ def set_goal(category, target_hours):
     """
     Sets or updates a weekly goal for a category.
     """
+    category = category.strip().title()
+    
     conn = get_db_connection()
     c = conn.cursor()
     

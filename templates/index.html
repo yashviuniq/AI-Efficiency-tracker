@@ -28,15 +28,18 @@
             <p>Optimize your life with data-driven insights.</p>
         </header>
 
-```
     <main class="grid-layout">
 
         <!-- Efficiency Overview -->
         <section class="card efficiency-card">
             <h2>Efficiency Overview</h2>
-
-            <div class="chart-container">
-                <canvas id="efficiencyChart"></canvas>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <div class="chart-container" style="flex: 1; min-width: 300px;">
+                    <canvas id="efficiencyChart"></canvas>
+                </div>
+                <div class="chart-container" style="flex: 1; min-width: 300px;">
+                    <canvas id="distributionChart"></canvas>
+                </div>
             </div>
 
             <div id="stats-text" class="stats-grid">
@@ -110,6 +113,22 @@
         </section>
     </main>
 </div>
+
+<!-- AI Chat Widget -->
+<div id="chat-widget" class="chat-widget hidden">
+    <div class="chat-header">
+        <h3>Productivity Coach AI</h3>
+        <button id="close-chat" class="close-btn">&times;</button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+        <div class="message ai">Hello! I'm your Productivity Coach AI. Let's talk about your efficiency. How can I help?</div>
+    </div>
+    <form id="chat-form" class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Ask about your productivity..." required>
+        <button type="submit" class="btn-primary" style="padding: 0.5rem 1rem; margin-left: 0.5rem; width: auto;">Send</button>
+    </form>
+</div>
+<button id="chat-toggle" class="chat-fab-btn">💬</button>
 
 <!-- Toast Notification -->
 <div id="toast" class="toast hidden">Message here</div>
