@@ -1,5 +1,11 @@
 import os
 try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
+try:
     import google.generativeai as genai
     HAS_GENAI = True
 except ImportError:

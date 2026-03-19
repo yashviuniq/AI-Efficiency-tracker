@@ -3,3 +3,5 @@ schedule
 scikit-learn
 colorama
 Flask
+google-generativeai
+python-dotenv

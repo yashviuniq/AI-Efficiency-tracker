@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Efficiency Tracker</title>
 
-```
-<!-- Google Font -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    ```
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 
-<!-- Correct Flask CSS Link -->
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Correct Flask CSS Link -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-```
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    ```
 
 </head>
 
@@ -28,114 +29,117 @@
             <p>Optimize your life with data-driven insights.</p>
         </header>
 
-    <main class="grid-layout">
+        <main class="grid-layout">
 
-        <!-- Efficiency Overview -->
-        <section class="card efficiency-card">
-            <h2>Efficiency Overview</h2>
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                <div class="chart-container" style="flex: 1; min-width: 300px;">
-                    <canvas id="efficiencyChart"></canvas>
+            <!-- Efficiency Overview -->
+            <section class="card efficiency-card">
+                <h2>Efficiency Overview</h2>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <div class="chart-container" style="flex: 1; min-width: 300px;">
+                        <canvas id="efficiencyChart"></canvas>
+                    </div>
+                    <div class="chart-container" style="flex: 1; min-width: 300px;">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
                 </div>
-                <div class="chart-container" style="flex: 1; min-width: 300px;">
-                    <canvas id="distributionChart"></canvas>
+
+                <div id="stats-text" class="stats-grid">
+                    <!-- Stats injected by JS -->
                 </div>
-            </div>
+            </section>
 
-            <div id="stats-text" class="stats-grid">
-                <!-- Stats injected by JS -->
-            </div>
-        </section>
+            <!-- Actions Panel -->
+            <section class="card actions-card">
 
-        <!-- Actions Panel -->
-        <section class="card actions-card">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="log-tab">Log Activity</button>
+                    <button class="tab-btn" data-tab="goal-tab">Set Goals</button>
+                    <button class="tab-btn" data-tab="train-tab">Train AI</button>
+                </div>
 
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="log-tab">Log Activity</button>
-                <button class="tab-btn" data-tab="goal-tab">Set Goals</button>
-                <button class="tab-btn" data-tab="train-tab">Train AI</button>
-            </div>
+                <!-- Log Activity -->
+                <div id="log-tab" class="tab-content active">
+                    <form id="logForm">
 
-            <!-- Log Activity -->
-            <div id="log-tab" class="tab-content active">
-                <form id="logForm">
+                        <div class="input-group">
+                            <label>Activity Name</label>
+                            <input type="text" id="activityName" placeholder="e.g. Coding Python" required>
+                        </div>
 
-                    <div class="input-group">
-                        <label>Activity Name</label>
-                        <input type="text" id="activityName" placeholder="e.g. Coding Python" required>
-                    </div>
+                        <div id="ai-suggestion" class="ai-chip hidden">
+                            AI Suggestion: <span id="suggested-cat">Work</span>
+                            <button type="button" id="accept-ai">✔</button>
+                        </div>
 
-                    <div id="ai-suggestion" class="ai-chip hidden">
-                        AI Suggestion: <span id="suggested-cat">Work</span>
-                        <button type="button" id="accept-ai">✔</button>
-                    </div>
+                        <div class="input-group">
+                            <label>Category</label>
+                            <input type="text" id="category" placeholder="e.g. Work" required>
+                        </div>
 
-                    <div class="input-group">
-                        <label>Category</label>
-                        <input type="text" id="category" placeholder="e.g. Work" required>
-                    </div>
+                        <div class="input-group">
+                            <label>Duration (minutes)</label>
+                            <input type="number" id="duration" placeholder="60" required>
+                        </div>
 
-                    <div class="input-group">
-                        <label>Duration (minutes)</label>
-                        <input type="number" id="duration" placeholder="60" required>
-                    </div>
+                        <button type="submit" class="btn-primary">Log Activity</button>
 
-                    <button type="submit" class="btn-primary">Log Activity</button>
+                    </form>
+                </div>
 
-                </form>
-            </div>
+                <!-- Set Goals -->
+                <div id="goal-tab" class="tab-content">
+                    <form id="goalForm">
 
-            <!-- Set Goals -->
-            <div id="goal-tab" class="tab-content">
-                <form id="goalForm">
+                        <div class="input-group">
+                            <label>Category</label>
+                            <input type="text" id="goalCategory" placeholder="e.g. Work" required>
+                        </div>
 
-                    <div class="input-group">
-                        <label>Category</label>
-                        <input type="text" id="goalCategory" placeholder="e.g. Work" required>
-                    </div>
+                        <div class="input-group">
+                            <label>Target Hours / Week</label>
+                            <input type="number" id="goalHours" step="0.1" placeholder="40" required>
+                        </div>
 
-                    <div class="input-group">
-                        <label>Target Hours / Week</label>
-                        <input type="number" id="goalHours" step="0.1" placeholder="40" required>
-                    </div>
+                        <button type="submit" class="btn-secondary">Update Goal</button>
 
-                    <button type="submit" class="btn-secondary">Update Goal</button>
+                    </form>
+                </div>
 
-                </form>
-            </div>
+                <!-- Train AI -->
+                <div id="train-tab" class="tab-content">
+                    <p>Train the AI model on your recent history for better categorization.</p>
+                    <button id="trainBtn" class="btn-accent">Train Model</button>
+                </div>
 
-            <!-- Train AI -->
-            <div id="train-tab" class="tab-content">
-                <p>Train the AI model on your recent history for better categorization.</p>
-                <button id="trainBtn" class="btn-accent">Train Model</button>
-            </div>
-
-        </section>
-    </main>
-</div>
-
-<!-- AI Chat Widget -->
-<div id="chat-widget" class="chat-widget hidden">
-    <div class="chat-header">
-        <h3>Productivity Coach AI</h3>
-        <button id="close-chat" class="close-btn">&times;</button>
+            </section>
+        </main>
     </div>
-    <div class="chat-messages" id="chat-messages">
-        <div class="message ai">Hello! I'm your Productivity Coach AI. Let's talk about your efficiency. How can I help?</div>
+
+    <!-- AI Chat Widget -->
+    <div id="chat-widget" class="chat-widget hidden">
+        <div class="chat-header">
+            <h3 style="font-size: 1.1rem; margin: 0;">YOUR EFFICIENCY COACH 🧑‍🏫</h3>
+            <button id="close-chat" class="close-btn">&times;</button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message ai">Hello! I'm your Efficiency Coach. Let's talk about your productivity. How can I
+                help?</div>
+        </div>
+        <form id="chat-form" class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Ask about your productivity..." required>
+            <button type="submit" class="btn-primary"
+                style="padding: 0.5rem 1rem; margin-left: 0.5rem; width: auto;">Send</button>
+        </form>
     </div>
-    <form id="chat-form" class="chat-input-area">
-        <input type="text" id="chat-input" placeholder="Ask about your productivity..." required>
-        <button type="submit" class="btn-primary" style="padding: 0.5rem 1rem; margin-left: 0.5rem; width: auto;">Send</button>
-    </form>
-</div>
-<button id="chat-toggle" class="chat-fab-btn">💬</button>
+    <button id="chat-toggle" class="chat-fab-btn">YOUR EFFICIENCY COACH 🧑‍🏫</button>
 
-<!-- Toast Notification -->
-<div id="toast" class="toast hidden">Message here</div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">Message here</div>
 
-<!-- Correct Flask JS Link -->
-<script src="{{ url_for('static', filename='script.js') }}"></script>
-```
+    <!-- Correct Flask JS Link -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    ```
 
 </body>
+
 </html>
