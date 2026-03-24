@@ -6,14 +6,20 @@ except ImportError:
     pass
 
 try:
-    import google.generativeai as genai
+    from google import genai
+    from google.genai import types
     HAS_GENAI = True
 except ImportError:
-    HAS_GENAI = False
+    # Try old library as fallback (if needed) but preferentially use new one
+    try:
+        import google.generativeai as genai_old
+        HAS_GENAI = "old"
+    except ImportError:
+        HAS_GENAI = False
 
 def get_chatbot_response(stats_data, user_message):
     if not HAS_GENAI:
-        return "The google-generativeai module is not installed. Please install it using 'pip install google-generativeai' to enable the AI."
+        return "The google-genai module is not installed. Please install it using 'pip install google-genai' to enable the AI."
 
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
@@ -21,8 +27,6 @@ def get_chatbot_response(stats_data, user_message):
             "No GEMINI_API_KEY environment variable found. "
             "Please set it to empower me to analyze your efficiency!"
         )
-    
-    genai.configure(api_key=api_key)
     
     stats_text = ""
     if not stats_data:
@@ -44,8 +48,23 @@ def get_chatbot_response(stats_data, user_message):
     )
     
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=system_instruction)
-        response = model.generate_content(user_message)
-        return response.text
+        if HAS_GENAI == True:
+            client = genai.Client(api_key=api_key)
+            response = client.models.generate_content(
+                model='gemini-3-flash-preview',
+                contents=user_message,
+                config=types.GenerateContentConfig(
+                    system_instruction=system_instruction
+                )
+            )
+            return response.text
+        else:
+            # Fallback to old SDK if someone only has that
+            import google.generativeai as genai_legacy
+            genai_legacy.configure(api_key=api_key)
+            model = genai_legacy.GenerativeModel('gemini-3-flash-preview', system_instruction=system_instruction)
+            response = model.generate_content(user_message)
+            return response.text
+            
     except Exception as e:
         return f"Sorry, I encountered an error while analyzing your data: {e}"
